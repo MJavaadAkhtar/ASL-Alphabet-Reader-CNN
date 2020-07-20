@@ -6,6 +6,7 @@
 1. [Overview](#Overview)
 3. [Model Training](#model-training)
 3. [How To Use It](#how-to-use-it)
+3. [How To Read Output](#how-to-read-output)
 
  
 ### Overview:
@@ -27,6 +28,7 @@ The loss graph is shown below: -->
 
 
 ### How To Use It
+#### If you want to train your own model
 There are 3 major steps that needs to be done before CNN is ready to use. These are as follows:
 
 <ol>
@@ -60,4 +62,61 @@ Change the number of distinct classes the images have. You can do that by changi
 Now you are ready to train your CNN model. Just run `python train.py` to train the model. 
 <div style='color:red'> <b>Note:</b> Make sure your image is 200px by 200px </div>
 
+#### If you want to use a trained model
+If you want to use a train model, you need to do the following steps:
+ <ul>
+ 
+ <li>
 
+ First you need to place you images inside `Test` folder. 
+ 
+ </li>
+ 
+ <li>
+
+ The CNN is placed inside the `model` folder. If you change the CNN model location, you need to update the following variable inside `model-load.py` file:
+ - `model_data = torch.load('locationOfCNN Model')`
+
+ </li>
+
+ <li>
+
+Now you are ready. Run the model on your images by running `python model-load.py` file.
+ </li>
+
+ </ul>
+
+#### How To Read Output
+It might be confusing at first how the output is displayed. The output of the model itself is displayed in numbers. Each number corresponds to a specific ASL alphabet. The mapping table is shown below:
+
+| OUTPUT | MAPPING OF ALPHABET |
+|--------|---------------------|
+| O      | A                   |
+| 1      | B                   |
+| 2      | C                   |
+| 3      | D                   |
+| 4      | DEL                 |
+| 5      | E                   |
+| 6      | F                   |
+| 7      | G                   |
+| 8      | H                   |
+| 9      | I                   |
+| 10     | J                   |
+| 11     | K                   |
+| 12     | L                   |
+| 13     | M                   |
+| 14     | N                   |
+| 15     | NOTHING             |
+| 16     | O                   |
+| 17     | P                   |
+| 18     | Q                   |
+| 19     | R                   |
+| 20     | S                   |
+| 21     | SPACE               |
+| 22     | T                   |
+| 23     | U                   |
+| 24     | V                   |
+| 25     | W                   |
+| 26     | X                   |
+| 27     | Y                   |
+| 28     | Z                   |

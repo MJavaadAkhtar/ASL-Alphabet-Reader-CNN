@@ -21,7 +21,7 @@ def get_accuracy(model, data):
 
 
 def train(model, train_data, batch_size=32, weight_decay=0.0,
-          learning_rate=0.001, num_epochs=1, checkpoint_path=None):
+          learning_rate=0.001, num_epochs=10, checkpoint_path=None):
     '''
     @model: The MLP model we are training
     @batch_size: The batch size to use
@@ -38,6 +38,7 @@ def train(model, train_data, batch_size=32, weight_decay=0.0,
                            lr=learning_rate,
                            weight_decay=weight_decay)
     iters, losses, train_acc, val_acc = [], [], [], []
+    tacc,vacc=0,0
 
     # training
     n = 0 
@@ -54,20 +55,31 @@ def train(model, train_data, batch_size=32, weight_decay=0.0,
             optimizer.zero_grad()
             n += 1
 
+            # if n % 100 == 0:
+            #      print("[Epoch %d]; [Iter %d]; Loss %f; Train Acc %.3f; Val Acc %.3f" % (epoch, n, float(loss)/batch_size, tacc, vacc))
+
         # save the current training information
         loss = float(loss)/batch_size
         tacc = get_accuracy(model, train_data)
         vacc = get_accuracy(model, valid_data)
-        print("Iter %d; Loss %f; Train Acc %.3f; Val Acc %.3f" % (n, loss, tacc, vacc))
-        # print("Iter %d; Loss %f; Train Acc %.3f;" % (n, loss, tacc))
+       
+        print("Iter %d; Loss %f; Train Acc %.3f;" % (n, loss, tacc))
 
         iters.append(n)
         losses.append(loss)
         train_acc.append(tacc)
         val_acc.append(vacc)
 
-        if (checkpoint_path is not None) and epoch % 2 == 0:
+        if (checkpoint_path is not None) and epoch % 1 == 0:
             torch.save(model.state_dict(), checkpoint_path.format(epoch))
+            with open("../dataset/allfileIter.json", 'w') as f:
+              json.dump(iters, f, indent=2)
+            with open("../dataset/allfileLoss.json", 'w') as h:
+              json.dump(losses, h, indent=2)
+            with open("../dataset/allfiletrain_acc.json", 'w') as pop:
+              json.dump(train_acc, pop, indent=2)
+            with open("../dataset/allfileval_acc.json", 'w') as pol:
+              json.dump(val_acc, pol, indent=2)
         # val_acc.append(vacc)
 
     # plotting
@@ -92,4 +104,4 @@ def train(model, train_data, batch_size=32, weight_decay=0.0,
     print("Final Validation Accuracy: {}".format(val_acc[-1]))
 
 cnn = CNN()
-train(cnn, train_data, batch_size=512, checkpoint_path="../dataset/CNN_{}")
+train(cnn, train_data, batch_size=256, checkpoint_path="../CNN_train_{}")
